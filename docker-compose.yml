@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  gateway:
+    build: ./gateway
+    container_name: eventhq-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+      - event
+
+  auth:
+    build: ./auth
+    container_name: eventhq-auth
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+
+  event:
+    build: ./event
+    container_name: eventhq-event
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:

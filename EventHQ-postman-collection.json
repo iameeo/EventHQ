@@ -1,0 +1,248 @@
+{
+  "info": {
+    "name": "EventHQ API Test",
+    "_postman_id": "eventhq-collection",
+    "description": "EventHQ \uacfc\uc81c\uc6a9 API \ud14c\uc2a4\ud2b8 \uceec\ub809\uc158",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. \ud68c\uc6d0\uac00\uc785",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3001",
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"jaeholee\",\n  \"password\": \"1234\"\n}"
+        }
+      }
+    },
+    {
+      "name": "2. \ub85c\uadf8\uc778 - access_token \uc800\uc7a5",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"access_token\", json.access_token);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3001",
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"jaeholee\",\n  \"password\": \"1234\"\n}"
+        }
+      }
+    },
+    {
+      "name": "3. \ud504\ub85c\ud544 \uc870\ud68c",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/auth/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3001",
+          "path": [
+            "auth",
+            "profile"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"user_id\", json.userId);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. \uc774\ubca4\ud2b8 \ub4f1\ub85d",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3002/events",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "events"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\\ucd9c\\uc11d \\uc774\\ubca4\\ud2b8\",\n  \"description\": \"7\\uc77c\\uac04 \\ucd9c\\uc11d \\uc2dc \\ubcf4\\uc0c1\",\n  \"condition\": \"login_7_days\",\n  \"status\": \"ACTIVE\",\n  \"startDate\": \"2025-05-16T00:00:00Z\",\n  \"endDate\": \"2025-05-31T23:59:59Z\"\n}"
+        }
+      }
+    },
+    {
+      "name": "5. \uc774\ubca4\ud2b8 \ubaa9\ub85d \uc870\ud68c",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3002/events",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "events"
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. \ubcf4\uc0c1 \ub4f1\ub85d",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3002/events/{{event_id}}/rewards",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "events",
+            "{{event_id}}",
+            "rewards"
+          ],
+          "protocol": "http"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"COUPON\",\n  \"amount\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "7. \ubcf4\uc0c1 \uc694\uccad",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3002/events/{{event_id}}/request",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "events",
+            "{{event_id}}",
+            "request"
+          ],
+          "protocol": "http"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"{{user_id}}\"\n}"
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "event_id",
+      "value": ""
+    },
+    {
+      "key": "user_id",
+      "value": ""
+    }
+  ]
+}
